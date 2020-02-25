@@ -8,28 +8,21 @@
 
 import SwiftUI
 
+struct User: Codable {
+    var firstName : String //= "Aaryan"
+    var secondName : String  //= "Kothari"
+}
+
 struct ContentView: View {
-    
-    @State private var numbers = [Int]()
-    @State private var currentNumber = 1
+    @State private var user = User(firstName: "Aaryan", secondName: "Kothari")
     var body: some View {
-        VStack {
-            List{
-                ForEach(numbers, id: \.self){
-                    Text("\($0)")
-                }
-                .onDelete(perform: removeRow)
-            }
+        Button("Save Data"){
+            let encoder = JSONEncoder()
             
-            Button("Add Number"){
-                self.numbers.append(self.currentNumber)
-                self.currentNumber += 1
+            if let data = try? encoder.encode(self.user){
+                UserDefaults.standard.set(data, forKey: "UserData")
             }
         }
-    }
-    
-   func removeRow(at offsets:IndexSet){
-        numbers.remove(atOffsets: offsets)
     }
 }
 
